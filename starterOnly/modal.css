@@ -299,6 +299,14 @@ input[data-error]::after {
     opacity: 0;
 }
 
+#location__message {
+    width: 200px;
+    height: 50px;
+    color: #ff0000;
+    font-size: 0.8rem;
+    visibility: hidden;
+}
+
 .checkbox-input {
     display: none;
 }

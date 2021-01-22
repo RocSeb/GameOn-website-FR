@@ -18,8 +18,8 @@ const lastname = document.getElementById("last");
 const email = document.getElementById("email");
 const birthdate = document.getElementById("birthdate");
 const quantity = document.getElementById("quantity");
-const localisation = document.querySelectorAll('input[name="location"]');
 const term = document.getElementById("checkbox1");
+const locMess = document.getElementById("location__message");
 
 //Regex
 const mailRgx = /^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9-]+(?:\.[a-zA-Z0-9-]+)*$/;
@@ -55,6 +55,7 @@ function validate() {
     const emailValue = email.value.trim();
     const birthValue = birthdate.value.trim();
     const quantityValue = quantity.value.trim();
+    const localisation = document.querySelector("input[name=location]:checked");
 
     if (firstnameValue.length < 2) {
         // Erreur
@@ -95,15 +96,16 @@ function validate() {
         // Erreur
         setErrorFor(quantity, "Veuillez choisir un nombre en 0 et 99");
     }
-    for (i = 0; i < localisation.length; i++) {
-        if (!localisation[i].checked) {
-            // Erreur
-            setErrorFor(localisation[i], "Choisissez une option");
-        } else {
-            //Valider
-            setSuccess(localisation[5]);
-            console.log("good");
-        }
+
+    if (localisation == null) {
+        // Erreur
+        setCheckError();
+        console.log(localisation);
+    } else {
+        //Valider
+        setCheckSuccess();
+        console.log("good");
+
     }
 
     if (!term.checked) {
@@ -117,7 +119,7 @@ function validate() {
 
 function setErrorFor(input, message) {
     const formDataElt = input.parentElement;
-    const small = formDataElt.querySelector('small');
+    const small = formDataElt.querySelector("small");
     // rajout message d'erreur dans l'élément et le place en état visible <small>
     small.innerText = message;
     small.style.visibility = 'visible';
@@ -128,7 +130,16 @@ function setErrorFor(input, message) {
 
 function setSuccess(input) {
     const formDataElt = input.parentElement;
-    const small = formDataElt.querySelector('small');
+    const small = formDataElt.querySelector("small");
     // place l'élément small caché
-    small.style.visibility = 'hidden';
+    small.style.visibility = "hidden";
+}
+
+function setCheckError() {
+    locMess.style.visibility = "visible";
+
+}
+
+function setCheckSuccess() {
+    locMess.style.visibility = "hidden";
 }
