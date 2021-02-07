@@ -8,10 +8,11 @@ function editNav() {
 }
 
 // DOM Elements
-const modalbg = document.querySelector(".bground");
+let modalbg = document.querySelector(".bground");
+const modalInput = document.querySelector("input");
 const modalBtn = document.querySelectorAll(".modal-btn");
 const formData = document.querySelectorAll(".formData");
-const modalCloseBtn = document.querySelectorAll(".close");
+let modalCloseBtn = document.querySelectorAll(".btn-close");
 const form = document.getElementById("formContainer");
 const firstname = document.getElementById("first");
 const lastname = document.getElementById("last");
@@ -41,14 +42,11 @@ function modalClose() {
     modalbg.style.display = "none";
 }
 
+//input.addEventListener("change, event")
+
 //formulaire soumis
 form.addEventListener("submit", (e) => {
     e.preventDefault();
-    validate();
-});
-
-function validate() {
-    // récupération des values provenant des inputs + suppression des blancs en debut et fin
 
     const firstnameValue = firstname.value.trim();
     const lastnameValue = lastname.value.trim();
@@ -56,90 +54,79 @@ function validate() {
     const birthValue = birthdate.value.trim();
     const quantityValue = quantity.value.trim();
     const localisation = document.querySelector("input[name=location]:checked");
+    let erreur;
+    let modalInput = document.querySelector("input");
+    const modalBody = document.querySelector(".modal-body");
+    let submitting = document.createElement('h2')
+    let close = document.createElement('button');
 
     if (firstnameValue.length < 2) {
-        // Erreur
-        setErrorFor(firstname, "Veuillez entrer 2 caractères ou plus pour le champ du nom.");
+        erreur = "Veuillez entrer 2 caractères ou plus pour le champ du nom.";
+        document.getElementById("erreur_firstname").innerHTML = erreur;
     } else {
-        // Valider
-        setSuccess(firstname);
+        erreur = "";
+        document.getElementById("erreur_firstname").innerHTML = erreur;
     }
 
     if (lastnameValue.length < 2) {
-        // Erreur
-        setErrorFor(lastname, "Veuillez entrer 2 caractères ou plus pour le champ du nom.");
+        erreur = "Veuillez entrer 2 caractères ou plus pour le champ du nom.";
+        document.getElementById("erreur_lastname").innerHTML = erreur;
     } else {
-        //valider
-        setSuccess(lastname);
+        erreur = "";
+        document.getElementById("erreur_lastname").innerHTML = erreur;
     }
 
-    if (emailValue.match(mailRgx)) {
-        // Valider
-        setSuccess(email);
+    if (!emailValue.match(mailRgx)) {
+        erreur = "Veuillez entrer une adresse email valide.";
+        document.getElementById("erreur_email").innerHTML = erreur;
     } else {
-        // Erreur
-        setErrorFor(email, "Veuillez entrer une adresse email valide.");
+        erreur = "";
+        document.getElementById("erreur_email").innerHTML = erreur;
     }
 
-    if (birthValue == "") {
-        // Erreur
-        setErrorFor(birthdate, "Vous devez entrer votre date de naissance.");
+    if (!birthValue) {
+        erreur = "Vous devez entrer votre date de naissance.";
+        document.getElementById("erreur_birthdate").innerHTML = erreur;
     } else {
-        //Valider
-        setSuccess(birthdate);
+        erreur = "";
+        document.getElementById("erreur_birthdate").innerHTML = erreur;
     }
 
-    if (quantityValue.match(quantityRgx)) {
-        // Valider
-        setSuccess(quantity);
+    if (!quantityValue.match(quantityRgx)) {
+        erreur = "Veuillez choisir un nombre entre 0 et 99";
+        document.getElementById("erreur_quantity").innerHTML = erreur;
     } else {
-        // Erreur
-        setErrorFor(quantity, "Veuillez choisir un nombre en 0 et 99");
+        erreur = "";
+        document.getElementById("erreur_quantity").innerHTML = erreur;
     }
 
-    if (localisation == null) {
-        // Erreur
-        setCheckError();
-        console.log(localisation);
+    if (!localisation) {
+        erreur = "Vous devez choisir une option";
+        document.getElementById("erreur_location").innerHTML = erreur;
     } else {
-        //Valider
-        setCheckSuccess();
-        console.log("good");
-
+        erreur = "";
+        document.getElementById("erreur_location").innerHTML = erreur;
     }
 
     if (!term.checked) {
-        // Erreur
-        setErrorFor(term, "Vous devez vérifier que vous acceptez les termes et conditions.");
+        erreur = "Veuillez vérifier que vous acceptez les termes et conditions.";
+        document.getElementById("erreur_condition").innerHTML = erreur;
     } else {
-        //Valider
-        setSuccess(term);
+        erreur = "";
+        document.getElementById("erreur_condition").innerHTML = erreur;
     }
-}
 
-function setErrorFor(input, message) {
-    const formDataElt = input.parentElement;
-    const small = formDataElt.querySelector("small");
-    // rajout message d'erreur dans l'élément et le place en état visible <small>
-    small.innerText = message;
-    small.style.visibility = 'visible';
+    if (firstnameValue.length >= 2 && lastnameValue.length >= 2 && emailValue.match(mailRgx) && birthValue && quantityValue.match(quantityRgx) && localisation && term.checked) {
+        form.style.visibility = "hidden";
+        modalBody.classList.add('modal-body', 'd-flex');
+        submitting.textContent = "Thank you for submitting your registration details.";
+        close.classList.add('btn-signup', 'btn-dead');
+        close.textContent = "Close"
+        modalBody.prepend(submitting, close);
 
-    //rajout de la classe error
-    formDataElt.className = "formData error";
-}
+        let modalCloseMod = document.querySelectorAll(".btn-dead");
+        //close modal event
+        modalCloseMod.forEach(elt => elt.addEventListener("click", modalClose));
 
-function setSuccess(input) {
-    const formDataElt = input.parentElement;
-    const small = formDataElt.querySelector("small");
-    // place l'élément small caché
-    small.style.visibility = "hidden";
-}
-
-function setCheckError() {
-    locMess.style.visibility = "visible";
-
-}
-
-function setCheckSuccess() {
-    locMess.style.visibility = "hidden";
-}
+    }
+});

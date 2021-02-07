@@ -195,6 +195,22 @@ main {
 .modal-body {
     padding: 15px 8%;
     margin: 15px auto;
+    width: 100%;
+}
+
+.d-flex {
+    display: flex;
+    flex-direction: column-reverse;
+    align-items: center;
+}
+
+.modal-body h2 {
+    position: absolute;
+    text-align: center;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    font-size: 1.8rem;
 }
 
 label {
@@ -299,12 +315,10 @@ input[data-error]::after {
     opacity: 0;
 }
 
-#location__message {
-    width: 200px;
+.erreur {
     height: 50px;
     color: #ff0000;
     font-size: 0.8rem;
-    visibility: hidden;
 }
 
 .checkbox-input {
